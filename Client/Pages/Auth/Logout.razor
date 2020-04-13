@@ -1,0 +1,15 @@
+@page "/logout"
+@inject ILoginService loginService
+@inject NavigationManager navigationManager
+
+<text>Login out ...</text>
+
+@using BlazorDemoUdemy.Client.Auth
+
+@code {
+   protected async override Task OnInitializedAsync(){
+       await loginService.Logout();
+       navigationManager.NavigateTo("");
+
+   } 
+}

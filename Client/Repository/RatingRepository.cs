@@ -1,0 +1,24 @@
+using System;
+using System.Threading.Tasks;
+using BlazorDemoUdemy.Client.Helpers;
+using BlazorDemoUdemy.Shared.Entity;
+
+namespace BlazorDemoUdemy.Client.Repository{
+  
+    public class RatingRepository : IRatingRepository{
+          private readonly IHttpService httpService;
+          private readonly string urlBase ="api/rating";
+
+        public RatingRepository(IHttpService httpService)
+        {
+            this.httpService = httpService;
+        }
+
+        public async Task Vote(MovieRating movieRating){
+            var httpResponse = await httpService.Post(urlBase, movieRating);
+            if (!httpResponse.Success){
+                throw new ApplicationException(await httpResponse.GetBody());
+            }
+        }
+    }
+}

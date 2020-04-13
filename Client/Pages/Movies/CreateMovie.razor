@@ -1,0 +1,26 @@
+@page "/movies/create"
+@inject NavigationManager navigationManager
+@inject IMoviesRepository moviesRepository
+@inject IGenreRepository genreRepository
+@attribute [Authorize]
+
+<h3> Create a movie</h3>
+@if (NotSelectedGenres != null){
+<MovieForm Movie="Movie" OnValidSubmit="SaveMovie" NoSelectedGenres="NotSelectedGenres"></MovieForm>
+}
+@code{
+    private List<Genre> NotSelectedGenres;
+    private Movie Movie = new Movie();
+
+    protected async override  Task OnInitializedAsync(){
+      NotSelectedGenres = await genreRepository.GetGenres();
+    }
+   private async Task SaveMovie(){
+       try {
+         var movieId = await moviesRepository.CreateMovie(Movie);
+         navigationManager.NavigateTo($"movie/{movieId}/{Movie.Title.Replace(" ","-")}");
+       } catch (Exception ex){
+
+       }      
+   }
+}
